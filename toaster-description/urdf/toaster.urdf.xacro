@@ -5,6 +5,9 @@
 
     <xacro:property name="wheel_radius" value="0.125" />
     <xacro:property name="wheel_width" value="0.100" />
+    <xacro:property name="wheel_vertical_offset" value="-0.0254" />
+
+    <xacro:property name="dummy_inertia" value="1e-09"/>
 
     <material name="dark_grey"><color rgba="0.2 0.2 0.2 1.0" /></material>
     <material name="light_grey"><color rgba="0.4 0.4 0.4 1.0" /></material>
@@ -63,11 +66,11 @@
     </xacro:macro>
 
     <xacro:wheel prefix="left">
-        <origin xyz="${wheelbase/2} ${track/2} ${wheel_vertical_offset}" rpy="0 0 0" />
+        <origin xyz="${wheelbase/2} 0 ${wheel_vertical_offset}" rpy="0 0 0" />
     </xacro:wheel>
 
     <xacro:wheel prefix="right">
-        <origin xyz="${wheelbase/2} ${-track/2} ${wheel_vertical_offset}" rpy="0 0 0" />
+        <origin xyz="$-{wheelbase/2} 0 ${wheel_vertical_offset}" rpy="0 0 0" />
     </xacro:wheel>
 
     <link name="base_link"></link>
@@ -81,7 +84,7 @@
     git <link name="imu_link">
         <inertial>
         <mass value="0.001"/>
-        <origin xyz="0 0 0" rpy="0 0 0"/>
+        
         <inertia ixx="${dummy_inertia}" ixy="0.0" ixz="0.0" iyy="${dummy_inertia}" iyz="0.0" izz="${dummy_inertia}"/>
         </inertial>
     </link>
@@ -89,19 +92,21 @@
         <parent link="chassis_link" />
         <child link="imu_link" />
     </joint>
+
+
     <link name="chassis_link">
         <visual>
-        <origin xyz="0 0 ${footprint_vertical_offset}" rpy="${PI/2} 0 ${PI/2}"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-            <mesh filename="package://jackal_description/meshes/jackal-base.stl"/>
+            <mesh filename="package://toaster-description/meshes/toaster-chassis.stl"/>
         </geometry>
-        <material name="dark_grey" />
+            <material name="dark_grey" />
         </visual>
         <collision>
-        <origin xyz="0 0 ${chassis_height/2}"/>
-        <geometry>
-            <box size="${chassis_length} ${chassis_width} ${chassis_height}"/>
-        </geometry>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+                <mesh filename="package://toaster-description/meshes/toaster-chassis.stl"/>
+            </geometry>
         </collision>
         <inertial>
         <!-- Center of mass -->
@@ -114,4 +119,7 @@
             izz="0.4485"/>
         </inertial>
     </link>   
+      <!-- Bring in simulation data for Gazebo. -->
+    <xacro:include filename="$(find toaster_description)/urdf/toaster.gazebo" />
+
 </robot>
