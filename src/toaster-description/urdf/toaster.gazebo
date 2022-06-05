@@ -21,6 +21,12 @@
     </plugin>
   </gazebo>  
   
+  <gazebo reference="caster_back_link">
+    <turnGravityOff>false</turnGravityOff>
+  </gazebo>
+  <gazebo reference="caster_front_link">
+    <turnGravityOff>false</turnGravityOff>
+  </gazebo>
   <gazebo reference="base_link">
     <turnGravityOff>false</turnGravityOff>
   </gazebo>
@@ -32,4 +38,5 @@
     <gazebo reference="imu_link">
     <turnGravityOff>false</turnGravityOff>
   </gazebo>
+
 </robot>
