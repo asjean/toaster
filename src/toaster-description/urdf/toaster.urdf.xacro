@@ -81,7 +81,7 @@
         <child link="chassis_link" />
     </joint>
 
-    git <link name="imu_link">
+    <link name="imu_link">
         <inertial>
         <mass value="0.001"/>
         
