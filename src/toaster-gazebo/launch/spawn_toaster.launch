@@ -8,8 +8,7 @@
   <include file="$(find toaster-description)/launch/description.launch">
   </include>
   <include file="$(find toaster-control)/launch/control.launch" />
-  <include file="$(find toaster-control)/launch/teleop.launch">
-  <arg name="joystick" value="$(arg joystick)" />  </include>
+  <include file="$(find toaster-control)/launch/teleop.launch"/>
 
   <!-- Spawn Robot -->
   <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model"
