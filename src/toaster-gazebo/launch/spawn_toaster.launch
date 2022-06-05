@@ -6,12 +6,10 @@
 
   <!-- Load description, controllers, and teleop nodes. -->
   <include file="$(find toaster-description)/launch/description.launch">
-    <arg name="config" value="$(arg config)" />
   </include>
   <include file="$(find toaster-control)/launch/control.launch" />
   <include file="$(find toaster-control)/launch/teleop.launch">
-    <arg name="joystick" value="$(arg joystick)" />
-  </include>
+  <arg name="joystick" value="$(arg joystick)" />  </include>
 
   <!-- Spawn Robot -->
   <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model"
