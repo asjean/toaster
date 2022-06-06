@@ -16,7 +16,7 @@
     <arg name="yaw" value="0" />
   </include>
 
-  <include file="$(find toaster-navigation)/launch/include/gmapping.launch"/>
+  <include file="$(find toaster-navigation)/launch/gmapping.launch"/>
   <!--- Run Move Base -->
-  <include file="$(find toaster-navigation)/launch/include/move_base.launch" />
+  <include file="$(find toaster-navigation)/launch/move_base.launch" />
 </launch>
