@@ -4,10 +4,16 @@
 
     <rosparam file="$(find toaster-navigation)/config/move_base.yaml" command="load"/>
     
-    <param name="base_global_planner" type="string" value="navfn/NavfnROS" />
-    <param name="base_local_planner" value="base_local_planner/TrajectoryPlannerROS"/>
+    <rosparam file="$(find toaster-navigation)/config/costmap_common.yaml" command="load" ns="global_costmap" />
+    <rosparam file="$(find toaster-navigation)/config/costmap_common.yaml" command="load" ns="local_costmap" />
     
-    <remap from="odom" to="odometry/filtered" />
+    <rosparam file="$(find toaster-navigation)/config/local_costmap.yaml" command="load" />
+    <rosparam file="$(find toaster-navigation)/config/global_costmap.yaml" command="load" />
+    
+    <rosparam file="$(find toaster-navigation)/config/base_local_planner.yaml" command="load" />
+    <rosparam file="$(find toaster-navigation)/config/move_base.yaml" command="load" />
+    
+    <remap from="odom" to="base_link" />
   </node>
 
 </launch>

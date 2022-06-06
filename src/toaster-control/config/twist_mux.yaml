@@ -1,14 +1,17 @@
-topics:
-- name    : interactive_marker
-  topic   : twist_marker_server/cmd_vel
-  timeout : 0.5
-  priority: 8
-- name    : external
-  topic   : cmd_vel
-  timeout : 0.5
-  priority: 1
-locks:
-- name    : e_stop
-  topic   : e_stop
-  timeout : 0.0
-  priority: 255
+topics: 
+  - 
+    name: interactive_marker
+    priority: 8
+    timeout: 0.5
+    topic: twist_marker_server/cmd_vel
+  - 
+    name: external
+    priority: 1
+    timeout: 0.5
+    topic: cmd_vel
+locks: 
+  - 
+    name: e_stop
+    priority: 255
+    timeout: 0.0
+    topic: e_stop
