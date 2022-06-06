@@ -147,33 +147,61 @@
   </joint>
   
   <!--Caster back  -->
-  <link name="caster_back_link">
-    <visual>
-      <origin rpy="1.57079632679 0 0" xyz="0.0 0.0 0 "/>
-      <geometry>
-        <sphere radius="0.02"/>
-      </geometry>
-      <material name="Black"/>
-    </visual>
-    <collision>
-      <geometry>
-        <sphere radius="0.02"/>
-      </geometry>
-      <origin rpy="1.57079632679 0 0" xyz="0 0.0 0 "/>
-    </collision>
-    <inertial>
-      <mass value="0.5"/>
-      <origin xyz="0 0 0"/>
-      <inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.001" iyz="0.0" izz="0.001"/>
-    </inertial>
-  </link>
-  <joint name="caster_back_joint" type="fixed">
-    <parent link="base_link"/>
-    <child link="caster_back_link"/>
-    <origin rpy="-1.57079632679 0 0" xyz="-0.2032 0.0 -.127"/>
-  </joint>
+    <link name="caster_back_link">
+        <visual>
+        <origin rpy="1.57079632679 0 0" xyz="0.0 0.0 0 "/>
+        <geometry>
+            <sphere radius="0.02"/>
+        </geometry>
+        <material name="Black"/>
+        </visual>
+        <collision>
+        <geometry>
+            <sphere radius="0.02"/>
+        </geometry>
+        <origin rpy="1.57079632679 0 0" xyz="0 0.0 0 "/>
+        </collision>
+        <inertial>
+        <mass value="0.5"/>
+        <origin xyz="0 0 0"/>
+        <inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.001" iyz="0.0" izz="0.001"/>
+        </inertial>
+    </link>
+    <joint name="caster_back_joint" type="fixed">
+        <parent link="base_link"/>
+        <child link="caster_back_link"/>
+        <origin rpy="-1.57079632679 0 0" xyz="-0.2032 0.0 -.127"/>
+    </joint>
   
+    <joint name="hokuyo_joint" type="fixed">
+        <axis xyz="0 1 0" />
+        <origin xyz="0 0 .25" rpy="0 0 0"/>
+        <parent link="base_link"/>
+        <child link="hokuyo_link"/>
+  </joint>
 
+  <!-- Hokuyo Laser -->
+    <link name="hokuyo_link">
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+                <box size="0.1 0.1 0.1"/>
+            </geometry>
+        </collision>
+
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+                <geometry>
+                    <sphere radius="0.02"/>
+                </geometry>
+        </visual>
+
+        <inertial>
+            <mass value="1e-5" />
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6" />
+        </inertial>
+  </link>
 
 
       <!-- Bring in simulation data for Gazebo. -->
