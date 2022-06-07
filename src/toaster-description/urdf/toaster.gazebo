@@ -23,9 +23,13 @@
   
   <gazebo reference="caster_back_link">
     <turnGravityOff>false</turnGravityOff>
+    <mu1 value="0.0"/>
+    <mu2 value="0.0"/>
   </gazebo>
   <gazebo reference="caster_front_link">
     <turnGravityOff>false</turnGravityOff>
+    <mu1 value="0.0"/>
+    <mu2 value="0.0"/>
   </gazebo>
   <gazebo reference="base_link">
     <turnGravityOff>false</turnGravityOff>

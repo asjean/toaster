@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <robot name="toaster" xmlns:xacro="http://www.ros.org/wiki/xacro">
     <xacro:property name="PI" value="3.1415926535897932" />
-    <xacro:property name="wheelbase" value="0.400" />
+    <xacro:property name="wheelbase" value="0.550" />
 
     <xacro:property name="wheel_radius" value="0.125" />
     <xacro:property name="wheel_width" value="0.100" />
@@ -66,11 +66,11 @@
     </xacro:macro>
 
     <xacro:wheel prefix="left">
-        <origin xyz="0 0.2 ${wheel_vertical_offset}" rpy="0 0 0" />
+        <origin xyz="0 0.24 ${wheel_vertical_offset}" rpy="0 0 0" />
     </xacro:wheel>
 
     <xacro:wheel prefix="right">
-        <origin xyz="0 -0.2 ${wheel_vertical_offset}" rpy="0 0 0" />
+        <origin xyz="0 -0.24 ${wheel_vertical_offset}" rpy="0 0 0" />
     </xacro:wheel>
 
     <link name="base_link"></link>
@@ -143,7 +143,7 @@
   <joint name="caster_front_joint" type="fixed">
     <parent link="base_link"/>
     <child link="caster_front_link"/>
-    <origin rpy="-1.57079632679 0 0" xyz="0.2032 0.0 -0.127"/>
+    <origin rpy="-1.57079632679 0 0" xyz="0.2032 0.0 -0.128"/>
   </joint>
   
   <!--Caster back  -->
