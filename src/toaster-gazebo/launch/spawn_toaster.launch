@@ -1,4 +1,5 @@
 <launch>
+  <param name="use_sim_time" value="true"/>
   <arg name="x" default="0" />
   <arg name="y" default="0" />
   <arg name="z" default="2" />

@@ -41,7 +41,7 @@
 
 
   <gazebo reference="laser_link">
-  <sensor type="ray" name="laser">
+  <sensor type="ray" name="laser_link">
     <pose>0 0 0 0 0 0</pose>
     <visualize>true</visualize>
     <update_rate>40</update_rate>
@@ -71,7 +71,7 @@
     </ray>
     <plugin name="gazebo_ros_laser" filename="libgazebo_ros_laser.so">
       <topicName>scan</topicName>
-      <frameName>laser</frameName>
+      <frameName>laser_link</frameName>
     </plugin>
   </sensor>
 </gazebo>

@@ -6,7 +6,7 @@ topics:
     topic: twist_marker_server/cmd_vel
   - 
     name: external
-    priority: 1
+    priority: 9
     timeout: 0.5
     topic: cmd_vel
 locks: 
