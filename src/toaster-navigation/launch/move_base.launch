@@ -13,7 +13,7 @@
     <rosparam file="$(find toaster-navigation)/config/base_local_planner.yaml" command="load" />
     <rosparam file="$(find toaster-navigation)/config/move_base.yaml" command="load" />
     
-    <remap from="odom" to="base_link" />
+    <remap from="odom" to="odometry" />
   </node>
 
 </launch>
