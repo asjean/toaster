@@ -1,11 +1,13 @@
 <launch>
 
-  <!-- <arg name="enable_ekf" default="$(optenv ENABLE_EKF true)"/> -->
-
   <rosparam command="load" file="$(find toaster-control)/config/control.yaml" />
 
   <node name="controller_spawner" pkg="controller_manager" type="spawner"
         args="toaster_joint_publisher toaster_velocity_controller" />
+
+  <node pkg="robot_localization" type="ekf_localization_node" name="ekf_localization">
+    <rosparam command="load" file="$(find toaster-control)/config/ekf.yaml" />
+  </node>
 
     <!-- http://wiki.ros.org/twist_mux -->
   <node pkg="twist_mux" type="twist_mux" name="twist_mux">
