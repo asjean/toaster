@@ -261,7 +261,7 @@ class Node:
                 self.updater.update()
             r_time.sleep()
 
-    def cmd_vel_callback(self, twist):
+    def cmd_vel_callback(self, twist): ##todo look at twist math here and fix
         self.last_set_speed_time = rospy.get_rostime()
 
         linear_x = twist.linear.x
@@ -273,10 +273,10 @@ class Node:
         vr = linear_x + twist.angular.z * self.BASE_WIDTH / 2.0  # m/s
         vl = linear_x - twist.angular.z * self.BASE_WIDTH / 2.0
 
-        vr_ticks = int(vr * self.TICKS_PER_METER)  # ticks/s
+        vr_ticks = -int(vr * self.TICKS_PER_METER)  # ticks/s
         vl_ticks = int(vl * self.TICKS_PER_METER)
 
-        rospy.loginfo("vr_ticks:%8d vl_ticks: %8d", -vr_ticks, vl_ticks)
+        rospy.loginfo("vr_ticks:%8d vl_ticks: %8d", vr_ticks, vl_ticks)
 
         try:
             # This is a hack way to keep a poorly tuned PID from making noise at speed 0
