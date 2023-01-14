@@ -9,11 +9,6 @@ topics:
     priority: 10
     timeout: 0.1
     topic: ds4/cmd_vel
-    
-    name: external
-    priority: 9
-    timeout: 0.5
-    topic: cmd_vel
 locks: 
   - 
     name: e_stop
