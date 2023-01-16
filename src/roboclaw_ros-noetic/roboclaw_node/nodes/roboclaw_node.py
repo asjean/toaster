@@ -200,10 +200,10 @@ class Node:
             self.roboclaw.SpeedM1M2(self.address, 0, 0)
             self.roboclaw.ResetEncoders(self.address)
 
-        self.MAX_SPEED          = rospy.get_param("~max_speed", 2.0)
-        self.TICKS_PER_METER    = rospy.get_param("~ticks_per_meter", 4342.2)
-        self.BASE_WIDTH         = rospy.get_param("~base_width", 0.315)
-        self.CMD_FREQ           = rospy.get_param("~cmd_frequency", 10)
+        self.MAX_SPEED          = rospy.get_param("~max_speed", 2.0) #m/s
+        self.TICKS_PER_METER    = rospy.get_param("~ticks_per_meter", 523)
+        self.BASE_WIDTH         = rospy.get_param("~base_width", 0.609)
+        self.CMD_FREQ           = rospy.get_param("~cmd_frequency", 20)
 
         self.encodm                 = EncoderOdom(self.TICKS_PER_METER, self.BASE_WIDTH)
         self.last_set_speed_time    = rospy.get_rostime()
@@ -270,13 +270,13 @@ class Node:
         if linear_x < -self.MAX_SPEED:
             linear_x = -self.MAX_SPEED
 
-        vr = linear_x + twist.angular.z * self.BASE_WIDTH / 2.0  # m/s
-        vl = linear_x - twist.angular.z * self.BASE_WIDTH / 2.0
+        vr = linear_x + twist.angular.z * self.BASE_WIDTH / 0.127  # m/s, 0.127 is wheel radius in meters 
+        vl = linear_x - twist.angular.z * self.BASE_WIDTH / 0.127
 
         vr_ticks = -int(vr * self.TICKS_PER_METER)  # ticks/s
         vl_ticks = int(vl * self.TICKS_PER_METER)
 
-        rospy.loginfo("vr_ticks:%8d vl_ticks: %8d", vr_ticks, vl_ticks)
+        rospy.loginfo("Left RPM:%8d Right RPM: %8d", vl_ticks / (393 * 60), vr_ticks / (393 * 60))
 
         try:
             # This is a hack way to keep a poorly tuned PID from making noise at speed 0
