@@ -276,7 +276,8 @@ class Node:
         vr_ticks = -int(vr * self.TICKS_PER_METER)  # ticks/s
         vl_ticks = int(vl * self.TICKS_PER_METER)
 
-        rospy.loginfo("Left RPM:%8d Right RPM: %8d", vl_ticks / (393 * 60), vr_ticks / (393 * 60))
+        rospy.loginfo("Left RPM:%2f Right RPM: %2f", vl_ticks / (393 * 60), vr_ticks / (393 * 60))
+        rospy.loginfo("Linear:%2f Angular: %2f", linear_x,twist.angular.z)
 
         try:
             # This is a hack way to keep a poorly tuned PID from making noise at speed 0
