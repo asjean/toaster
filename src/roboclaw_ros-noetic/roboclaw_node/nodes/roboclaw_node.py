@@ -21,7 +21,8 @@ class EncoderOdom:
     def __init__(self, ticks_per_meter, base_width):
         self.TICKS_PER_METER = ticks_per_meter
         self.BASE_WIDTH = base_width
-        self.odom_pub = rospy.Publisher('/odom', Odometry, queue_size=10)
+        # self.odom_pub = rospy.Publisher('/odom', Odometry, queue_size=10)
+        self.twist_pub = rospy.Publisher('/roboclaw/twist',TwistWithCovarianceStamped, queue_size=10)
         self.cur_x = 0
         self.cur_y = 0
         self.cur_theta = 0.0
@@ -42,13 +43,13 @@ class EncoderOdom:
         right_ticks = enc_right - self.last_enc_right
         self.last_enc_left = enc_left
         self.last_enc_right = enc_right
-        # rospy.loginfo("Encoder L: %d Encoder R: %d" %(enc_left,enc_right))
+
         dist_left = left_ticks / self.TICKS_PER_METER
         dist_right = right_ticks / self.TICKS_PER_METER
         dist = (dist_right + dist_left) / 2.0
 
         current_time = rospy.Time.now()
-        d_time = (current_time - self.last_enc_time).to_sec()
+        d_time = (current_time - self.last_enc_time).to_sec()##todo look at twist math here and fix
         self.last_enc_time = current_time
 
         # TODO find better what to determine going straight, this means slight deviation is accounted
@@ -87,36 +88,48 @@ class EncoderOdom:
         quat = tf.transformations.quaternion_from_euler(0, 0, cur_theta)
         current_time = rospy.Time.now()
 
-       	#br = tf.TransformBroadcaster() #add command line to enable/disable odom tf publish
+        twist_message = TwistWithCovarianceStamped()
+        twist_message.header.stamp = current_time
+        twist_message.header.frame_id = "base_link"
+        twist_message.twist.twist.linear.x = vel_x
+        twist_message.twist.twist.angular.z = vel_theta
+        twist_message.twist.covariance = [0.01, 0.0, 0.0, 0.0, 0.0, 0.0,
+                                        0.0, 0.01, 0.0, 0.0, 0.0, 0.0,
+                                        0.0, 0.0, 99999, 0.0, 0.0, 0.0,
+                                        0.0, 0.0, 0.0, 99999, 0.0, 0.0,
+                                        0.0, 0.0, 0.0, 0.0, 99999, 0.0,
+                                        0.0, 0.0, 0.0, 0.0, 0.0, 0.01]
+        self.twist_pub.publish(twist_message)
+        #br = tf.TransformBroadcaster()
         #br.sendTransform((cur_x, cur_y, 0),
         #                 tf.transformations.quaternion_from_euler(0, 0, cur_theta),
         #                 current_time,
         #                 "base_link",
         #                 "odom")
 
-        odom = Odometry()
-        odom.header.stamp = current_time
-        odom.header.frame_id = 'odom'
+        # odom = Odometry()
+        # odom.header.stamp = current_time
+        # odom.header.frame_id = 'odom'
 
-        odom.pose.pose.position.x = cur_x
-        odom.pose.pose.position.y = cur_y
-        odom.pose.pose.position.z = 0.0
-        odom.pose.pose.orientation = Quaternion(*quat)
+        # odom.pose.pose.position.x = cur_x
+        # odom.pose.pose.position.y = cur_y
+        # odom.pose.pose.position.z = 0.0
+        # odom.pose.pose.orientation = Quaternion(*quat)
 
-        odom.pose.covariance[0] = 0.01
-        odom.pose.covariance[7] = 0.01
-        odom.pose.covariance[14] = 99999
-        odom.pose.covariance[21] = 99999
-        odom.pose.covariance[28] = 99999
-        odom.pose.covariance[35] = 0.01
+        # odom.pose.covariance[0] = 0.01
+        # odom.pose.covariance[7] = 0.01
+        # odom.pose.covariance[14] = 99999
+        # odom.pose.covariance[21] = 99999
+        # odom.pose.covariance[28] = 99999
+        # odom.pose.covariance[35] = 0.01
 
-        odom.child_frame_id = 'base_link'
-        odom.twist.twist.linear.x = vx
-        odom.twist.twist.linear.y = 0
-        odom.twist.twist.angular.z = vth
-        odom.twist.covariance = odom.pose.covariance
+        # odom.child_frame_id = 'base_link'
+        # odom.twist.twist.linear.x = vx
+        # odom.twist.twist.linear.y = 0
+        # odom.twist.twist.angular.z = vth
+        # odom.twist.covariance = odom.pose.covariance
 
-        self.odom_pub.publish(odom)
+        # self.odom_pub.publish(odom)
 
 
 class Node:
@@ -181,7 +194,7 @@ class Node:
         self.updater.add(diagnostic_updater.
                          FunctionDiagnosticTask("Vitals", self.check_vitals))
         
-        rospy.sleep(1)
+        rospy.sleep(1) # why this?
         try:
             with self.mutex:
                 version = self.roboclaw.ReadVersion(self.address)
@@ -201,9 +214,9 @@ class Node:
             self.roboclaw.ResetEncoders(self.address)
 
         self.MAX_SPEED          = rospy.get_param("~max_speed", 2.0) #m/s
-        self.TICKS_PER_METER    = rospy.get_param("~ticks_per_meter", 2065)
-        self.BASE_WIDTH         = rospy.get_param("~base_width", 0.609)
-        self.CMD_FREQ           = rospy.get_param("~cmd_frequency", 20)
+        self.TICKS_PER_METER    = rospy.get_param("~ticks_per_meter", 2067)
+        self.BASE_WIDTH         = rospy.get_param("~base_width", 0.475)
+        self.CMD_FREQ           = rospy.get_param("~cmd_frequency", 20) #rate
 
         self.encodm                 = EncoderOdom(self.TICKS_PER_METER, self.BASE_WIDTH)
         self.last_set_speed_time    = rospy.get_rostime()
@@ -266,7 +279,7 @@ class Node:
 
         linear_x = twist.linear.x
         if linear_x > self.MAX_SPEED:
-            linear_x = self.MAX_SPEED
+            linear_x = self.MAX_SPEEDupdate_puupdate_puupdate_pu
         if linear_x < -self.MAX_SPEED:
             linear_x = -self.MAX_SPEED
 
