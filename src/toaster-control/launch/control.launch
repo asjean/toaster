@@ -1,14 +1,12 @@
 <launch>
 
   <rosparam command="load" file="$(find toaster-control)/config/control.yaml" />
-
+    <node pkg="robot_localization" type="ekf_localization_node" name="ekf_localization">
+      <rosparam command="load" file="$(find toaster-control)/config/ekf.yaml" />
+    </node>
   <node name="controller_spawner" pkg="controller_manager" type="spawner"
         args="toaster_joint_publisher toaster_velocity_controller" />
-
-  <node pkg="robot_localization" type="ekf_localization_node" name="ekf_localization">
-    <rosparam command="load" file="$(find toaster-control)/config/ekf.yaml" />
-  </node>
-
+  <node name="imu" pkg="toaster-control" type="imu.py" respawn="false" respawn_delay="2" />
     <!-- http://wiki.ros.org/twist_mux -->
   <node pkg="twist_mux" type="twist_mux" name="twist_mux">
     <rosparam command="load" file="$(find toaster-control)/config/twist_mux.yaml" />

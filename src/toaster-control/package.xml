@@ -70,7 +70,8 @@
   <exec_depend>roslaunch</exec_depend>
   <exec_depend>topic_tools</exec_depend>
   <exec_depend>twist_mux</exec_depend>
-
+  <build_depend>rospy</build_depend>
+  <exec_depend>rospy</exec_depend>
 
   <!-- The export tag contains other, unspecified, tags -->
   <export>

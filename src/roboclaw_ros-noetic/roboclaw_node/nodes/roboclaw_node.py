@@ -42,7 +42,7 @@ class EncoderOdom:
         right_ticks = enc_right - self.last_enc_right
         self.last_enc_left = enc_left
         self.last_enc_right = enc_right
-
+        # rospy.loginfo("Encoder L: %d Encoder R: %d" %(enc_left,enc_right))
         dist_left = left_ticks / self.TICKS_PER_METER
         dist_right = right_ticks / self.TICKS_PER_METER
         dist = (dist_right + dist_left) / 2.0
@@ -87,12 +87,12 @@ class EncoderOdom:
         quat = tf.transformations.quaternion_from_euler(0, 0, cur_theta)
         current_time = rospy.Time.now()
 
-        br = tf.TransformBroadcaster()
-        br.sendTransform((cur_x, cur_y, 0),
-                         tf.transformations.quaternion_from_euler(0, 0, cur_theta),
-                         current_time,
-                         "base_link",
-                         "odom")
+       	#br = tf.TransformBroadcaster() #add command line to enable/disable odom tf publish
+        #br.sendTransform((cur_x, cur_y, 0),
+        #                 tf.transformations.quaternion_from_euler(0, 0, cur_theta),
+        #                 current_time,
+        #                 "base_link",
+        #                 "odom")
 
         odom = Odometry()
         odom.header.stamp = current_time
@@ -201,7 +201,7 @@ class Node:
             self.roboclaw.ResetEncoders(self.address)
 
         self.MAX_SPEED          = rospy.get_param("~max_speed", 2.0) #m/s
-        self.TICKS_PER_METER    = rospy.get_param("~ticks_per_meter", 523)
+        self.TICKS_PER_METER    = rospy.get_param("~ticks_per_meter", 2065)
         self.BASE_WIDTH         = rospy.get_param("~base_width", 0.609)
         self.CMD_FREQ           = rospy.get_param("~cmd_frequency", 20)
 

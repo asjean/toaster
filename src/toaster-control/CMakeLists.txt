@@ -15,6 +15,7 @@ find_package(catkin REQUIRED COMPONENTS
   roslaunch
   topic_tools
   twist_mux
+  rospy
 )
 
 ## System dependencies are found with CMake's conventions
