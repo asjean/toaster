@@ -9,7 +9,7 @@ from roboclaw_driver.roboclaw_3 import Roboclaw as roboclaw
 
 import rospy
 import tf
-from geometry_msgs.msg import Quaternion, Twist
+from geometry_msgs.msg import Quaternion, Twist, TwistWithCovarianceStamped
 from nav_msgs.msg import Odometry
 
 __author__ = "bwbazemore@uga.edu (Brad Bazemore)"
