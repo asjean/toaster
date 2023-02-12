@@ -91,8 +91,8 @@ class EncoderOdom:
         twist_message = TwistWithCovarianceStamped()
         twist_message.header.stamp = current_time
         twist_message.header.frame_id = "base_link"
-        twist_message.twist.twist.linear.x = vel_x
-        twist_message.twist.twist.angular.z = vel_theta
+        twist_message.twist.twist.linear.x = vx
+        twist_message.twist.twist.angular.z = vth
         twist_message.twist.covariance = [0.01, 0.0, 0.0, 0.0, 0.0, 0.0,
                                         0.0, 0.01, 0.0, 0.0, 0.0, 0.0,
                                         0.0, 0.0, 99999, 0.0, 0.0, 0.0,
