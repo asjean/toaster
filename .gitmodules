@@ -1,3 +1,6 @@
 [submodule "src/rplidar_ros"]
 	path = src/rplidar_ros
 	url = https://github.com/Slamtec/rplidar_ros.git
+[submodule "src/toaster-control/src/vectornav"]
+	path = src/vectornav
+	url = https://github.com/dawonn/vectornav.git
