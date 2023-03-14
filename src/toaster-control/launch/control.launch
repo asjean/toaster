@@ -6,7 +6,8 @@
     </node>
   <node name="controller_spawner" pkg="controller_manager" type="spawner"
         args="toaster_joint_publisher toaster_velocity_controller" />
-  <node name="imu" pkg="toaster-control" type="imu.py" respawn="false" respawn_delay="2" />
+  <!-- <node name="imu" pkg="toaster-control" type="imu.py" respawn="false" respawn_delay="2" /> -->
+	<node name="arthurbreadcrumb" pkg="toaster-control" type="breadcrumb.py" respawn="false"/>
     <!-- http://wiki.ros.org/twist_mux -->
   <node pkg="twist_mux" type="twist_mux" name="twist_mux">
     <rosparam command="load" file="$(find toaster-control)/config/twist_mux.yaml" />

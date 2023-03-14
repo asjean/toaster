@@ -1,0 +1,9 @@
+<launch>
+	<include file="$(find toaster-description)/launch/description.launch"/>
+	<include file="$(find toaster-control)/launch/control.launch"/>
+	<include file="$(find toaster-control)/launch/teleop.launch"/>
+	<include file="$(find roboclaw_node)/launch/roboclaw.launch"/>
+	<include file="$(find rplidar_ros)/launch/rplidar.launch"/>
+	<include file="$(find toaster-navigation)/launch/gmapping.launch"/>
+	<include file="$(find toaster-navigation)/launch/move_base.launch"/>
+</launch>

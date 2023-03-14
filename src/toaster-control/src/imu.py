@@ -11,15 +11,15 @@ from sensor_msgs.msg import MagneticField, Imu
 from std_msgs.msg import Float64
 def imu_node():
     dataPublisher = rospy.Publisher('imu/data', Imu, queue_size=10)
-    magneticPublisher = rospy.Publisher('imu/mag', MagneticField, queue_size=10)
+    #magneticPublisher = rospy.Publisher('imu/mag', MagneticField, queue_size=10)
     rospy.init_node('imu')
     rate = rospy.Rate(100)
     rospy.loginfo('Imu Initialized')
-    i2c = busio.I2C(board.SCL, board.SDA, frequency=100000)
+    i2c = busio.I2C(board.SCL, board.SDA, frequency=400000)
     bno = BNO08X_I2C(i2c,address=0x4a)
     bno.enable_feature(BNO_REPORT_ACCELEROMETER)
     bno.enable_feature(BNO_REPORT_GYROSCOPE)
-    bno.enable_feature(BNO_REPORT_MAGNETOMETER)
+    #bno.enable_feature(BNO_REPORT_MAGNETOMETER)
     bno.enable_feature(BNO_REPORT_ROTATION_VECTOR)
     time.sleep(3.0)
     while not rospy.is_shutdown():
@@ -43,14 +43,14 @@ def imu_node():
         data_msg.linear_acceleration_covariance[0] = 0.01
         data_msg.angular_velocity_covariance[0] = 0.01
         dataPublisher.publish(data_msg)
-        mag_msg = MagneticField()
-        mx,my,mz = bno.magnetic
-        mag_msg.header.stamp = rospy.Time.now()
-        mag_msg.magnetic_field.x = mx
-        mag_msg.magnetic_field.y = my
-        mag_msg.magnetic_field.z = mz
-        mag_msg.magnetic_field_covariance[0] = -1
-        magneticPublisher.publish
+        #mag_msg = MagneticField()
+        #mx,my,mz = bno.magnetic
+        #mag_msg.header.stamp = rospy.Time.now()
+        #mag_msg.magnetic_field.x = mx
+        #mag_msg.magnetic_field.y = my
+        #mag_msg.magnetic_field.z = mz
+        #mag_msg.magnetic_field_covariance[0] = -1
+        #magneticPublisher.publish
         rate.sleep()
 
     rospy.loginfo("Imu Shutdown")
