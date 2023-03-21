@@ -1,0 +1,67 @@
+#!/usr/bin/env/python
+import rospy
+from geometry_msgs.msg import PoseWithCovariance
+import numpy as np
+from filterpy.kalman import UnscentedKalmanFilter, MerweScaledSigmaPoints
+from geometry_msgs.msg import PoseWithCovarianceStamped
+
+# Define the state vector
+# This example includes position (x, y, z) and orientation (quaternion)
+x = np.zeros(7)
+
+# Define the measurement model
+# This example uses only the position information
+def h(x):
+    return x[:3]
+
+# Initialize the filter
+points = MerweScaledSigmaPoints(n=7, alpha=.1, beta=2., kappa=0.)
+ukf = UnscentedKalmanFilter(dim_x=7, dim_z=3, dt=0.1, fx=fx, hx=h, points=points)
+ukf.x = np.zeros(7)
+ukf.P = np.eye(7)*0.1
+ukf.Q = np.eye(7)*0.001
+ukf.R = np.eye(3)*0.01
+
+# Define a callback function to receive pose estimates from the two sources
+def pose_callback1(msg):
+    # Extract the position and covariance from the message
+    position = np.array([msg.pose.position.x, msg.pose.position.y, msg.pose.position.z])
+    covariance = np.array(msg.pose.covariance).reshape((6,6))
+    
+    # Update the filter with the measurement from source 1
+    ukf.predict()
+    ukf.update(position)
+
+def pose_callback2(msg):
+    # Extract the position and covariance from the message
+    position = np.array([msg.pose.position.x, msg.pose.position.y, msg.pose.position.z])
+    covariance = np.array(msg.pose.covariance).reshape((6,6))
+    
+    # Update the filter with the measurement from source
+    ukf.predict()
+    ukf.update(position)
+
+# Get the fused pose estimate
+fused_position = ukf.x[:3]
+fused_orientation = ukf.x[3:]
+fused_covariance = ukf.P[:3,:3]
+
+# Publish the fused pose estimate
+fused_pose = PoseWithCovarianceStamped()
+fused_pose.pose.position.x = fused_position[0]
+fused_pose.pose.position.y = fused_position[1]
+fused_pose.pose.position.z = fused_position[2]
+fused_pose.pose.orientation.x = fused_orientation[0]
+fused_pose.pose.orientation.y = fused_orientation[1]
+fused_pose.pose.orientation.z = fused_orientation[2]
+fused_pose.pose.orientation.w = fused_orientation[3]
+fused_pose.pose.covariance = fused_covariance.ravel().tolist()
+fused_pose_pub.publish(fused_pose)
+Subscribe to the pose estimates from each source
+rospy.Subscriber("breadcrumb/pose", PoseWithCovarianceStamped, pose_callback1)
+rospy.Subscriber("pose_source2", PoseWithCovarianceStamped, pose_callback2)
+
+Initialize the node and start the main loop
+rospy.init_node("pose_fusion")
+fused_pose_pub = rospy.Publisher("fused_pose", PoseWithCovarianceStamped, queue_size=10)
+rospy.spin()
